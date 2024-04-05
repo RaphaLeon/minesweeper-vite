@@ -31,24 +31,21 @@ export class Cell {
       this.htmlCell.classList.add('boom');
       return;
     }
+    this.show();
+  }
 
+  show() {
+    if (this.isAMine()) {
+      this.htmlCell.classList.add('mine');
+      return;
+    }
     this.htmlCell.classList.add('safe');
     this.htmlCell.style.color = config.colorValues[this.#value] || '';
     this.htmlCell.innerHTML = this.#value > 0 ? this.#value : '';
   }
 
-  show(gameStatus) {
-    this.disable();
-
-    if (this.isAMine()) {
-      if (this.isFlagged()) return;
-      this.htmlCell.classList.add(gameStatus === 'win' ? 'flag' : 'mine');
-    }
-
-    if (this.isFlagged()) {
-      this.htmlCell.classList.add('wronglyFlagged');
-      return;
-    }
+  setWrongFlag() {
+    this.htmlCell.classList.add('wronglyFlagged');
   }
 
   highlightOn() {

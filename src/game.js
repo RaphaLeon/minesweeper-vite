@@ -71,7 +71,7 @@ export class Game {
 
 	openMine(cell) {
 		cell.open();
-		this.showAllCells('lose');
+		this.lose();
 		this.showMessage(config.messages.LOSE);
 	}
 
@@ -79,7 +79,7 @@ export class Game {
 		cell.open();
 		this.movesRemaining -= 1;
 		if (this.movesRemaining === 0) {
-			this.showAllCells('win');
+			this.win();
 			this.totalFlaggeds = this.level.mines;
 			this.updateTotalFlagsIndicator();
 			this.showMessage(config.messages.WIN);
@@ -108,8 +108,21 @@ export class Game {
 		this.updateTotalFlagsIndicator();
 	}
 
-	showAllCells(gameStatus) {
-		this.board.getEnables().forEach(cell => cell.show(gameStatus));
+	win() {
+		this.board.getEnables().forEach(cell => {
+			cell.disable();
+			if (cell.isAMine() && !cell.isFlagged()) cell.toggleFlag();
+		})
+	}
+
+	lose() {
+		this.board.getEnables().forEach(cell => {
+			cell.disable();
+			if (cell.isAMine())
+				cell.show()
+			else if (cell.isFlagged())
+				cell.setWrongFlag();
+		})
 	}
 
 	updateTotalFlagsIndicator() {
