@@ -21,11 +21,12 @@ export class Game {
 	}
 
 	renderBoard() {
-		gameBoard.innerHTML = ''
-		this.board.getAll().forEach((row) => {
+		gameBoard.innerHTML = '';
+		const cells = this.board.getAll();
+		for (let index = 0; index < cells.length; index+= this.level.cols) {
 			const rowDiv = document.createElement('div');
-			rowDiv.className = 'board-row';
-			row.forEach((cell) => {
+			rowDiv.className = 'board-row'
+			cells.slice(index, index + this.level.cols).forEach((cell) => {
 				const cellDiv = document.createElement('div');
 				cellDiv.className = 'cell';
 				cellDiv.addEventListener('click', (e) => {
@@ -45,12 +46,11 @@ export class Game {
 						this.hidePerimeter(cell);
 					});
 				}
-				
 				cell.setUI(cellDiv);
 				rowDiv.appendChild(cellDiv);
 			});
 			gameBoard.appendChild(rowDiv);
-		})
+		}
 	}
 
 	openCell(cell) {
